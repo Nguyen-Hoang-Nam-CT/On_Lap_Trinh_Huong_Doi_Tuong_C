@@ -9,10 +9,16 @@ class ps{
 		void xuat();
 		int ucln(int a,int b);
 		void rutGon();
+		void chuanHoa();
 		ps cong(ps a);
 		ps tru(ps a);
 		ps nhan(ps a);
 		ps chia(ps a);
+		
+		ps operator + (ps a);
+		ps operator - (ps a);
+		ps operator * (ps a);
+		ps operator / (ps a);
 };
 
 int main()
@@ -27,6 +33,8 @@ int main()
 	q.xuat();
 	
 	cout<<"\n	Ket qua cac phep tinh: ";
+	//--------------- ket qua cac phep tinh bang cac ham binh thuong ---------------
+	cout<<"\nKet qua cac phep tinh dung cac ham binh thuong";
 	//cong
 	cout<<"\n";
 	p.xuat();
@@ -58,18 +66,94 @@ int main()
 	q.xuat();
 	cout<<" = ";
 	p.chia(q).xuat();
+	cout<<"\n";
+	system("pause");
 	
+	//--------------- ket qua cac phep tinh dung operator ---------------
+	cout<<"\nKet qua cac phep tinh dung operator";
+	cout<<"\n";
+	p.xuat();
+	cout<<"\t + ";
+	q.xuat();
+	cout<<" = ";
+	(p+q).xuat();
+	
+	//tru
+	cout<<"\n";
+	p.xuat();
+	cout<<"\t - ";
+	q.xuat();
+	cout<<" = ";
+	(p-q).xuat();
+	
+	//nhan
+	cout<<"\n";
+	p.xuat();
+	cout<<"\t * ";
+	q.xuat();
+	cout<<" = ";
+	(p*q).xuat();
+	
+	//chia
+	cout<<"\n";
+	p.xuat();
+	cout<<"\t / ";
+	q.xuat();
+	cout<<" = ";
+	(p/q).xuat();
+	cout<<"\n";
+	system("pause");
 //	p.rutGon();
 //	cout<<"\nThong tin phan so sau khi rut gon la: ";
 //	p.xuat();
 	return 0;
 }
+//---------------------------- các hàm operator ----------------------------
+ps ps::operator / (ps a)
+{
+	ps kq;
+	kq.tu = tu*a.mau;
+	kq.mau = mau*a.mau;
+	kq.rutGon();
+	kq.chuanHoa();
+	return kq;
+}
+ps ps::operator * (ps a)
+{
+	ps kq;
+	kq.tu = tu*a.tu;
+	kq.mau = mau*a.mau;
+	kq.rutGon();
+	kq.chuanHoa();
+	return kq;
+}
+ps ps::operator - (ps a)
+{
+	ps kq;
+	kq.tu = tu*a.mau - a.tu*mau;
+	kq.mau = mau*a.mau;
+	kq.rutGon();
+	kq.chuanHoa();
+	return kq;
+}
+ps ps::operator + (ps a)
+{
+	ps kq;
+	kq.tu = tu*a.mau + a.tu*mau;
+	kq.mau = mau*a.mau;
+	kq.rutGon();
+	kq.chuanHoa();
+	return kq;
+}
+
+//---------------------------- cac ham binh thuong ----------------------------
 ps ps::chia(ps a)
 {
 	ps kq;
 	kq.tu = tu*a.mau;
 	kq.mau = mau*a.mau;
 	kq.rutGon();
+	kq.chuanHoa();
 	return kq;
 }
 ps ps::nhan(ps a)
@@ -78,6 +162,7 @@ ps ps::nhan(ps a)
 	kq.tu = tu*a.tu;
 	kq.mau = mau*a.mau;
 	kq.rutGon();
+	kq.chuanHoa();
 	return kq;
 }
 ps ps::tru(ps a)
@@ -86,6 +171,7 @@ ps ps::tru(ps a)
 	kq.tu = tu*a.mau - a.tu*mau;
 	kq.mau = mau*a.mau;
 	kq.rutGon();
+	kq.chuanHoa();
 	return kq;
 }
 ps ps::cong(ps a)
@@ -94,7 +180,16 @@ ps ps::cong(ps a)
 	kq.tu = tu*a.mau + a.tu*mau;
 	kq.mau = mau*a.mau;
 	kq.rutGon();
+	kq.chuanHoa();
 	return kq;
+}
+void ps::chuanHoa()
+{
+	if(mau<0)
+	{
+		tu*=-1;
+		mau*=-1;
+	}
 }
 void ps::rutGon()
 {
