@@ -14,21 +14,25 @@ class Book{//sach
 	public:
 		virtual void InPut();
 		virtual void OutPut();
+		virtual void ThanhTien() = 0;
 };
-class TextBook{//sach giao khoa
+class TextBook : public Book{//sach giao khoa
 	private:
 		char TinhTrang[100];//cu or moi
 	public:
 		void InPut();
 		void OutPut();
+		void ThanhTien();
 };
-void HamNoiChuoi(char a[],char b[]);//noi chuoi b vao sau chuoi a
-class ReferenceBooks{//sach tham khao
+
+class ReferenceBooks : public Book{//sach tham khao
 	private:
 		float Thue;
 	public:
 		void InPut();
 		void OutPut();
+		void TinhLuong();
+		void ThanhTien();
 };
 
 void NoiChuoi(char a[],char b);
@@ -43,6 +47,7 @@ int main()
 //------------------------- Cac ham khong nam trong class -------------------------
 int RANDUM(int a,int b)
 {
+	srand(time(0));
 	return rand()%(b-a+1)+a;
 }
 void NoiChuoi(char a[],char b)
@@ -53,9 +58,39 @@ void NoiChuoi(char a[],char b)
 //------------------------- -------------------------
 
 //------------------------- Cac ham cua class ReferenceBooks-------------------------
+void ReferenceBooks::OutPut()
+{
+	cout<<"\nThue: "<<Thue;
+}
+void ReferenceBooks::InPut()
+{
+//	Book::InPut();
+//	cout<<"\nNhap thue: ";
+//	cin>>Thue;
+// Thue *= DonGia;
 
+	int temp = RANDUM(5,20);
+	Thue = temp * DonGia;
+}
 //------------------------- Cac ham cua class TextBook -------------------------
-
+void 
+void TextBook::OutPut()
+{
+	TextBook::OutPut();
+	cout<<"\nTinh trang sach: "<<TinhTrang;
+}
+void TextBook::InPut()
+{
+	Book::InPut();
+//	fflush(stdin);
+//	cout<<"\nNhap tinh trang sach: ";
+//	gets(TinhTrang);
+	int r = RANDUM(1,10);
+	if(r%2==0)
+		strcpy(TinhTrang,"Moi");
+	else
+		strcpy(TinhTrang,"Cu");
+}
 //------------------------- Cac ham cua class Book -------------------------
 void Book::OutPut()
 {
