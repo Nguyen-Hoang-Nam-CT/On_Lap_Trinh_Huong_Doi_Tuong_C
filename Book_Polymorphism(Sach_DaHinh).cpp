@@ -9,12 +9,12 @@ char SoLuongMaSach = 'A',Day= 49;//nhung bien nay ho tro cho nhung ham auto nhap
 class Book{//sach
 	protected:
 		char MaSach[100],NgayNhap[100],NhaXuatBan[100];
-		float DonGia;
+		float DonGia,ThanhTien;
 		int SoLuong;
 	public:
 		virtual void InPut();
 		virtual void OutPut();
-		virtual void ThanhTien() = 0;
+		virtual void TinhThanhTien() = 0;
 };
 class TextBook : public Book{//sach giao khoa
 	private:
@@ -22,7 +22,7 @@ class TextBook : public Book{//sach giao khoa
 	public:
 		void InPut();
 		void OutPut();
-		void ThanhTien();
+		void TinhThanhTien();
 };
 
 class ReferenceBooks : public Book{//sach tham khao
@@ -32,19 +32,65 @@ class ReferenceBooks : public Book{//sach tham khao
 		void InPut();
 		void OutPut();
 		void TinhLuong();
-		void ThanhTien();
+		void TinhThanhTien();
 };
 
 void NoiChuoi(char a[],char b);
 int RANDUM(int a,int b);
+void OutPutMenu();
+void InPutTextBook(Book *&a,int &SoLuongSach);//dau & truoc Book vi co su thay doi vung nho nen phai de dau &
+void InPutReferenceBooks(Book *&a,int &SoLuongSach);
 int main()
 {
-	
+	Book *BookArray[100];
+	int selection,SoLuongSach=0;
+	while(1)
+	{
+		OutPutMenu();
+		cout<<"\nNhap lua chon cua ban: ";
+		cin>>selection;
+		if(selection == 1)
+			InPutTextBook(BookArray[SoLuongSach],SoLuongSach);
+		else if(selection == 2)
+			InPutReferenceBooks(BookArray[SoLuongSach],SoLuongSach);
+		else
+		{
+			for(int i=0;SoLuongSach;i++)
+			{
+				delete BookArray[i];
+			}
+			break;
+		}
+	}
 	system("pause");
 	return 0;
 
 }
 //------------------------- Cac ham khong nam trong class -------------------------
+void InPutReferenceBooks(Book *&a,int &SoLuongSach)
+{
+	a = new ReferenceBooks;
+	a->InPut();
+	SoLuongSach++;
+}
+void InPutTextBook(Book *&a,int &SoLuongMaSach)
+{
+	a = new TextBook;
+	a->InPut();
+	SoLuongMaSach++;
+}
+void OutPutMenu()
+{
+	cout<<"\n\t----------------------------------- MENU -----------------------------------";
+	cout<<"\n\t\tPhim 1: Them 1 sach giao khoa vao danh sach";
+	cout<<"\n\t\tPhim 2: Them 1 sach tham khao vao danh sach";
+	cout<<"\n\t\tPhim 3: Xuat List Book";
+	cout<<"\n\t\tPhim 4: Tong thanh tien cho tung loai sach";
+	cout<<"\n\t\tPhim 5: Tinh trung binh cong don gia cho cac sach tham khao";
+	cout<<"\n\t\tPhim 6: Xuat ra cac sach giao khoa cua nha xuat ban x";
+	cout<<"\n\t\tPhim 7: Giai phong vung nho va ket thuc chuong trinh(hoac phim khac)";
+	cout<<"\n\t----------------------------------------------------------------------------";
+}
 int RANDUM(int a,int b)
 {
 	srand(time(0));
@@ -58,6 +104,10 @@ void NoiChuoi(char a[],char b)
 //------------------------- -------------------------
 
 //------------------------- Cac ham cua class ReferenceBooks-------------------------
+void ReferenceBooks::TinhThanhTien()
+{
+	ThanhTien = SoLuong * DonGia + Thue;
+}
 void ReferenceBooks::OutPut()
 {
 	cout<<"\nThue: "<<Thue;
@@ -73,7 +123,16 @@ void ReferenceBooks::InPut()
 	Thue = temp * DonGia;
 }
 //------------------------- Cac ham cua class TextBook -------------------------
-void 
+void TextBook::TinhThanhTien()
+{
+	if(stricmp(TinhTrang,"Moi") == 0)
+		ThanhTien = SoLuong * DonGia;
+	else if(stricmp(TinhTrang,"Cu") == 0)
+		ThanhTien = SoLuong * DonGia * 0.5;
+	else
+		ThanhTien = 0; //=0 co nghia la khong tinh duoc
+}
+
 void TextBook::OutPut()
 {
 	TextBook::OutPut();
