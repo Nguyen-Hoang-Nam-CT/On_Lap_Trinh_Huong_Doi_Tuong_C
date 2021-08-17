@@ -18,6 +18,8 @@ class Book{//sach
 		virtual void TinhThanhTien() = 0;
 		float GeterThanhTien();
 		char *GeterPhanLoai();
+		float GeterDonGia();
+		char *GeterNhaXuatBan();
 };
 class TextBook : public Book{//sach giao khoa
 	private:
@@ -27,17 +29,15 @@ class TextBook : public Book{//sach giao khoa
 		void InPut();
 		void OutPut();
 		void TinhThanhTien();
-
 };
 
 class ReferenceBooks : public Book{//sach tham khao
 	private:
 		float Thue;
 	public:
-		RederenceBooks();
+		ReferenceBooks();
 		void InPut();
 		void OutPut();
-		void TinhLuong();
 		void TinhThanhTien();
 };
 
@@ -47,56 +47,42 @@ void OutPutMenu();
 void InPutTextBook(Book *&a,int &SoLuongSach);//dau & truoc Book vi co su thay doi vung nho nen phai de dau &
 void InPutReferenceBooks(Book *&a,int &SoLuongSach);
 void OutPutListBook(Book *a[],int SoLuongSach);
+float TrungBinhCongDonGiaSachThamKhao(Book *a[],int SoLuongSach);
+void LietKeSachGiaoKhoaCuaNhaXuatBanX(Book *a[],int SoLuongSach);
 int main()
 {
 	Book *BookArray[100];
 	int selection,SoLuongSach=0;
+	srand(time(0));
 	while(1)
 	{
 		OutPutMenu();
 		cout<<"\nNhap lua chon cua ban: ";
 		cin>>selection;
+//		system("cls");
 		if(selection == 1)
-		{
-//			InPutTextBook(BookArray[SoLuongSach],SoLuongSach);
-			BookArray[SoLuongSach] = new TextBook;
-			BookArray[SoLuongSach]->InPut();
-			SoLuongSach++;
-		}
+			InPutTextBook(BookArray[SoLuongSach],SoLuongSach);
 		else if(selection == 2)
-		{
-//			InPutReferenceBooks(BookArray[SoLuongSach],SoLuongSach);
-			BookArray[SoLuongSach] = new ReferenceBooks;
-			BookArray[SoLuongSach]->InPut();
-			SoLuongSach++;
-		}
+			InPutReferenceBooks(BookArray[SoLuongSach],SoLuongSach);
 		else if(selection == 3)
-		{
-//			OutPutListBook(BookArray,SoLuongSach);
-			cout<<"\nSo luong sach hien tai la: "<<SoLuongSach;
-			for(int i=0;i<SoLuongSach;i++)
-			{
-				cout<<"\nThong tin sach thu "<<i+1;
-				BookArray[i]->OutPut();
-			}
-		}
+			OutPutListBook(BookArray,SoLuongSach);
 		else if(selection == 4)
 		{
 			float sumTextBook = 0,sumReferenceBooks = 0;
-			float r=0;
 			for(int i=0;i<SoLuongSach;i++)
 			{
 				if(stricmp(BookArray[i]->GeterPhanLoai(),"TextBook")==0)
 					sumTextBook += BookArray[i]->GeterThanhTien();
-				else if(stricmp(BookArray[i]->GeterPhanLoai(),"ReferenceBooks"))
-					sumReferenceBooks == BookArray[i]->GeterThanhTien();
 				else
-					r += BookArray[i]->GeterThanhTien();
+					sumReferenceBooks += BookArray[i]->GeterThanhTien();
 			}
-			cout<<"\nTong thanh tien cua sach giao khoa la: "<<sumTextBook;
-			cout<<"\nTong thanh tien cua sach tham khao la: "<<sumReferenceBooks;
-			cout<<"\nGia tri bi sai la: "<<r;
+			cout<<"\nTong thanh tien cua sach giao khoa la: "<<(size_t)sumTextBook;
+			cout<<"\nTong thanh tien cua sach tham khao la: "<<(size_t)sumReferenceBooks;
 		}
+		else if(selection == 5)
+			cout<<"\nTrung binh cong don gia cac hoa don cua sach tham khao: "<<TrungBinhCongDonGiaSachThamKhao(BookArray,SoLuongSach);
+		else if(selection == 6)
+			LietKeSachGiaoKhoaCuaNhaXuatBanX(BookArray,SoLuongSach);
 		else
 		{
 			for(int i=0;SoLuongSach;i++)
@@ -111,14 +97,47 @@ int main()
 
 }
 //------------------------- Cac ham khong nam trong class -------------------------
-void OutPutListBook(Book *a[],int SoLuongSach)
+void LietKeSachGiaoKhoaCuaNhaXuatBanX(Book *a[],int SoLuongSach)
 {
-	
+	int count = 0;
+	char x[100];
+	cout<<"\nNhap nha xuat ban sach giao khoa can tim: ";
+	fflush(stdin);
+	gets(x);
 	for(int i=0;i<SoLuongSach;i++)
 	{
-		cout<<"\nThong tin sach thu "<<i+1;
+		if(stricmp(a[i]->GeterNhaXuatBan(),x) == 0 && stricmp(a[i]->GeterPhanLoai(),"TextBook") == 0)
+		{
+			a[i]->OutPut();
+			count++;
+		}
+	}
+	if(count == 0)
+		cout<<"Khong co sach giao khoa nao cua nha xuat ban "<<x;
+}
+float TrungBinhCongDonGiaSachThamKhao(Book *a[],int SoLuongSach)
+{
+	int count = 0;
+	float sum = 0;
+	for(int i=0;i<SoLuongSach;i++)
+		if(stricmp(a[i]->GeterPhanLoai(),"RederenceBooks") == 0)
+		{
+			count++;
+			sum += a[i]->GeterDonGia();
+		}
+	if(count == 0)
+		return 0;
+	return (sum/count);
+}
+void OutPutListBook(Book *a[],int SoLuongSach)
+{
+	cout<<"\n=============== THONG TIN CACH HOA DON SACH ===============";
+	for(int i=0;i<SoLuongSach;i++)
+	{
+		cout<<"\nTHONG TIN HOA DON SACH THU "<<i+1;
 		a[i]->OutPut();
 	}
+	cout<<"\n============================================================";
 }
 void InPutReferenceBooks(Book *&a,int &SoLuongSach)
 {
@@ -126,11 +145,11 @@ void InPutReferenceBooks(Book *&a,int &SoLuongSach)
 	a->InPut();
 	SoLuongSach++;
 }
-void InPutTextBook(Book *&a,int &SoLuongMaSach)
+void InPutTextBook(Book *&a,int &SoLuongSach)
 {
 	a = new TextBook;
 	a->InPut();
-	SoLuongMaSach++;
+	SoLuongSach++;
 }
 void OutPutMenu()
 {
@@ -140,18 +159,18 @@ void OutPutMenu()
 	cout<<"\n\t\tPhim 3: Xuat List Book";
 	cout<<"\n\t\tPhim 4: Tong thanh tien cho tung loai sach";
 	cout<<"\n\t\tPhim 5: Tinh trung binh cong don gia cho cac sach tham khao";
-	cout<<"\n\t\tPhim 6: Xuat ra cac sach giao khoa cua nha xuat ban x";
+	cout<<"\n\t\tPhim 6: Xuat ra cac hoa don sach giao khoa cua nha xuat ban x";
 	cout<<"\n\t\tPhim 7: Giai phong vung nho va ket thuc chuong trinh(hoac phim khac)";
 	cout<<"\n\t----------------------------------------------------------------------------";
 }
 int RANDUM(int a,int b)
 {
-	srand(time(0));
 	return rand()%(b-a+1)+a;
 }
 void NoiChuoi(char a[],char b)
 {
-	a[strlen(a)] = 'b';
+	
+	a[strlen(a)]=b;
 	a[strlen(a)+1] = '\0';
 }
 //------------------------- -------------------------
@@ -163,8 +182,9 @@ void ReferenceBooks::TinhThanhTien()
 }
 void ReferenceBooks::OutPut()
 {
-	ReferenceBooks::OutPut();
-	cout<<"\nThue: "<<Thue;
+	Book::OutPut(); //Bi cai loi ngo ngan o cho nay troi oi la troi. ==> day la thanh qua cua viec code khong check haha
+	cout<<"\n\tThue: "<<Thue;
+	cout<<"\n";
 }
 void ReferenceBooks::InPut()
 {
@@ -176,11 +196,12 @@ void ReferenceBooks::InPut()
 	int temp = RANDUM(5,20);
 	Thue = temp * DonGia;
 	cout<<"\nThue nhan duoc la: "<<Thue;
+	TinhThanhTien();
 }
-ReferenceBooks::RederenceBooks()
+ReferenceBooks::ReferenceBooks()
 {
 	Thue = 0;
-	strcpy(PhanLoai,"RederenceBooks");
+	strcpy(PhanLoai,"RederenceBooks");// chu RederenceBooks viet sai :D ma khong sua dau haha
 }
 //------------------------- Cac ham cua class TextBook -------------------------
 
@@ -188,17 +209,15 @@ void TextBook::TinhThanhTien()
 {
 	if(stricmp(TinhTrang,"Moi") == 0)
 		ThanhTien = SoLuong * DonGia;
-	else if(stricmp(TinhTrang,"Cu") == 0)
+	else 
 		ThanhTien = SoLuong * DonGia * 0.5;
-	else
-		ThanhTien = 0; //=0 co nghia la khong tinh duoc
 }
 
 void TextBook::OutPut()
 {
-	TextBook::OutPut();
-	cout<<"\nTinh trang sach: "<<TinhTrang;
-	cout<<"\n\n";
+	Book::OutPut(); //Bi cai loi ngo ngan o cho nay troi oi la troi. ==> day la thanh qua cua viec code khong check haha
+	cout<<"\n\tTinh trang sach: "<<TinhTrang;
+	cout<<"\n";
 }
 void TextBook::InPut()
 {
@@ -206,12 +225,14 @@ void TextBook::InPut()
 //	fflush(stdin);
 //	cout<<"\nNhap tinh trang sach: ";
 //	gets(TinhTrang);
+
 	int r = RANDUM(1,10);
 	if(r%2==0)
 		strcpy(TinhTrang,"Moi");
 	else
 		strcpy(TinhTrang,"Cu");
 	cout<<"\nTinh trang nhan duoc la: "<<TinhTrang;
+	TinhThanhTien();
 }
 TextBook::TextBook()
 {
@@ -219,6 +240,14 @@ TextBook::TextBook()
 	strcpy(PhanLoai,"TextBook");
 }
 //------------------------- Cac ham cua class Book -------------------------
+char *Book::GeterNhaXuatBan()
+{
+	return NhaXuatBan;
+}
+float Book::GeterDonGia()
+{
+	return DonGia;
+}
 char* Book::GeterPhanLoai()
 {
 	return PhanLoai;
@@ -229,12 +258,13 @@ float Book::GeterThanhTien()
 }
 void Book::OutPut()
 {
-//	cout<<"\nMa sach: "<<MaSach;
-//	cout<<"\nNgay nhap: "<<NgayNhap;
-//	cout<<"\nNha xuat ban: "<<NhaXuatBan;
-//	cout<<"\nDon gia: "<<DonGia;
-//	cout<<"\nSo luong: "<<SoLuong;
-	cout<<"\nHello work";
+	cout<<"\n\tLoai sach: "<<PhanLoai;
+	cout<<"\n\tMa sach: "<<MaSach;
+	cout<<"\n\tNGay nhap: "<<NgayNhap;
+	cout<<"\n\tNha xuat ban: "<<NhaXuatBan;
+	cout<<"\n\tDon gia: "<<DonGia;
+	cout<<"\n\tSo luong: "<<SoLuong;
+	cout<<"\n =============> Thanh tien: "<<(size_t)ThanhTien;
 }
 void Book::InPut()
 {
@@ -272,12 +302,10 @@ void Book::InPut()
 	if(SoLuongMaSach == 123)
 		SoLuongMaSach = 65;
 		
-	srand(time(0));
-	DonGia = RANDUM(10000,500000);
+	DonGia = RANDUM(10000,30000);
 	cout<<"\nDon gia nhan duoc la: "<<DonGia;
 	
-	srand(time(0));
-	SoLuong = RANDUM(1000,10000);
+	SoLuong = RANDUM(1,1000);
 	cout<<"\nSo luong nhan duoc la: "<<SoLuong;
 }
 Book::Book()
