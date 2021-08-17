@@ -53,7 +53,7 @@ int main()
 {
 	Book *BookArray[100];
 	int selection,SoLuongSach=0;
-	srand(time(0));
+	srand(time(0));//de ham nay o day ma khong de ham nay trong ham random vi khi nhap du lieu nhanh qua no khong bi trung nhau(Cung mot khoang thoi gian nhung co duoc 2 gia tri random khac nhau)
 	while(1)
 	{
 		OutPutMenu();
